@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/location', [LocationController::class, 'store'])->name('location.store');
 
-    Route::get('/rider', [RiderController::class, 'index']);
+    Route::get('/rider', [RiderController::class, 'index'])->name('rider.index');
     Route::post('/rider/get-location', [RiderController::class, 'getLocation']);
 });
 
