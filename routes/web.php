@@ -23,12 +23,12 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/dashboard/fetch-address', [DashboardController::class, 'fetchAddress']);
 
     Route::post('/location', [LocationController::class, 'store'])->name('location.store');
+    Route::post('/location/fetch-address', [LocationController::class, 'fetchAddress'])->name('location.address');
 
     Route::get('/rider', [RiderController::class, 'index'])->name('rider.index');
-    Route::post('/rider/get-location', [RiderController::class, 'getLocation']);
+    Route::post('/rider/get-location', [RiderController::class, 'getLocation'])->name('rider.location');
 });
 
 Auth::routes();

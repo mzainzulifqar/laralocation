@@ -14,9 +14,9 @@ class RiderController extends Controller
         $user = Auth::user();
 
         // Check if the user has the "rider" role
-        // if (!$user->hasRole('rider')) {
-        //     abort(403, 'You are not authorized to view this page as a rider.');
-        // }
+        if (!$user->hasRole('rider') && !$user->hasRole('super_admin')) {
+            abort(403, 'You are not authorized to view this page as a rider.');
+        }
 
         // Fetch all saved locations from the database
         $locations = Location::all();
@@ -28,10 +28,10 @@ class RiderController extends Controller
     {
         $user = Auth::user();
 
-        // Check if the user has the "rider" role
-        // if (!$user->hasRole('rider')) {
-        //     return response()->json(['error' => 'You are not authorized to access this resource.'], 403);
-        // }
+        // Check if the user has the "rider" or "admin" role
+        if (!$user->hasRole('rider') && !$user->hasRole('super_admin')) {
+            return response()->json(['error' => 'You are not authorized to access this resource.'], 403);
+        }
 
         // Get the rider's latitude and longitude from the request
         $riderLatitude = $request->input('latitude');
@@ -46,7 +46,7 @@ class RiderController extends Controller
             $distance = $this->calculateDistance($riderLatitude, $riderLongitude, $location->latitude, $location->longitude);
             $locationsWithDistance[] = [
                 'id' => $location->id,
-                'title' => 'Location ' . mt_rand(1000, 9999), // Replace with your own random title logic
+                'title' => $location->name, // Replace with your own random title logic
                 'distance' => $distance,
             ];
         }

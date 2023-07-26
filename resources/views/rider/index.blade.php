@@ -21,58 +21,40 @@
                 <div class="card">
                     <div class="card-header">My Location</div>
 
-                    <div class="card-body">
+                    <div class="card-body" id="address">
 
 
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">My Past Locations</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">My Past Locations <span>Location Date</span></div>
 
                     <div class="card-body">
-                        <div class="list-group">
+                        <ul class="list-group">
                             @forelse ($locations as $location)
-                                <a href=":javascript" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">{{ $location->name }}</h6>
-                                        <small class="text-muted">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</small>
-                                    </div>
-                                    <p class="mb-1">{{ $location->latitude }} , {{ $location->longitude }}</p>
-                                </a>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ $loop->index + 1 }}. {{ $location->name }}
+                                    <span
+                                        class="badge bg-primary">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</span>
+                                </li>
                             @empty
                                 No Locations
                             @endforelse
-                        </div>
+                        </ul>
 
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">All Locations</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">All Locations <span>Distance From Rider</span></div>
 
                     <div class="card-body">
-                        <div class="list-group">
-                            @forelse ($locations as $location)
-                                <a href=":javascript" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">{{ $location->name }}</h6>
-                                        <small class="text-muted">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</small>
-                                    </div>
-                                    <p class="mb-1">{{ $location->latitude }} , {{ $location->longitude }}</p>
-                                </a>
-                            @empty
-                                No Locations
-                            @endforelse
-                        </div>
 
-                    </div>
+                        <ul class="list-group" id="all-locations">
 
-                    <div class="card">
-                        <div class="card-header"></div>
-                        <div class="card-body">
-                            <div id="map" style="height: 400px;"></div>
-                        </div>
+                        </ul>
+
                     </div>
 
                 </div>
@@ -81,18 +63,8 @@
     </div>
 
     <script>
-        var map;
-        var marker;
 
         function initMap() {
-            var initialLocation = {
-                lat: 0,
-                lng: 0
-            };
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: initialLocation,
-                zoom: 15
-            });
 
             // Try to get the rider's location
             if (navigator.geolocation) {
@@ -101,13 +73,8 @@
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
-                    map.setCenter(riderLocation);
-                    marker = new google.maps.Marker({
-                        position: riderLocation,
-                        map: map,
-                        draggable: true
-                    });
 
+                    fetchAddress(riderLocation.lat, riderLocation.lng);
                     // Get the locations and their distances from the rider
                     fetchRiderLocations(riderLocation);
                 });
@@ -129,14 +96,45 @@
                 return response.json();
             }).then(function(data) {
                 // Show the locations and their distances in the HTML (You can update this part as per your UI design)
-                console.log(data);
-                var locationsList = document.createElement('ul');
+                // data.locations.forEach(function(location) {
+                //     var locationItem = document.getElementById('distance' + location.id);
+                //     locationItem.innerHTML = location.title + ': ' + location.distance + ' km';
+                // });
+                var locationsList = document.getElementById('all-locations');
                 data.locations.forEach(function(location) {
-                    var locationItem = document.createElement('li');
-                    locationItem.innerText = location.title + ': ' + location.distance + ' km';
-                    locationsList.appendChild(locationItem);
+                    var locationItem = '<li class="list-group-item d-flex justify-content-between align-items-center">'+
+                        location.title +
+                        '<span class="badge bg-primary">Distance: ' +
+                            location.distance + ' km '+
+                            '</span> </li>';
+                    locationsList.insertAdjacentHTML('beforeend', locationItem);
                 });
-                document.body.appendChild(locationsList);
+                // document.body.appendChild(locationsList);
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
+
+
+        function fetchAddress(latitude, longitude) {
+            var token = document.head.querySelector('meta[name="csrf-token"]');
+            var tokenContent = token.content;
+            var formData = new FormData();
+            formData.append('latitude', latitude);
+            formData.append('longitude', longitude);
+            formData.append('_token', tokenContent);
+
+            fetch('/location/fetch-address', {
+                method: 'POST',
+                body: formData
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                if (data && data.address) {
+                    document.getElementById('address').innerHTML = '<p class="alert alert-info">Location: '+data.address+'</p>';
+                } else {
+                    document.getElementById('address').innerHTML = '<p class="alert alert-warning">Not found</p';
+                }
             }).catch(function(error) {
                 console.log(error);
             });

@@ -99,7 +99,7 @@
                                     formData.append('longitude', longitude);
                                     formData.append('_token', tokenContent);
 
-                                    fetch('/dashboard/fetch-address', {
+                                    fetch('/location/fetch-address', {
                                         method: 'POST',
                                         body: formData
                                     }).then(function(response) {
