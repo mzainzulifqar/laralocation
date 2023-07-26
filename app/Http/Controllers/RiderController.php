@@ -29,9 +29,9 @@ class RiderController extends Controller
         $user = Auth::user();
 
         // Check if the user has the "rider" role
-        if (!$user->hasRole('rider')) {
-            return response()->json(['error' => 'You are not authorized to access this resource.'], 403);
-        }
+        // if (!$user->hasRole('rider')) {
+        //     return response()->json(['error' => 'You are not authorized to access this resource.'], 403);
+        // }
 
         // Get the rider's latitude and longitude from the request
         $riderLatitude = $request->input('latitude');

@@ -35,7 +35,7 @@
                             @forelse ($locations as $location)
                                 <a href=":javascript" class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">{{ $location->name }}</h5>
+                                        <h6 class="mb-1">{{ $location->name }}</h6>
                                         <small class="text-muted">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</small>
                                     </div>
                                     <p class="mb-1">{{ $location->latitude }} , {{ $location->longitude }}</p>
@@ -49,10 +49,32 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header"></div>
+                    <div class="card-header">All Locations</div>
+
                     <div class="card-body">
-                        <div id="map" style="height: 400px;"></div>
+                        <div class="list-group">
+                            @forelse ($locations as $location)
+                                <a href=":javascript" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ $location->name }}</h6>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ $location->latitude }} , {{ $location->longitude }}</p>
+                                </a>
+                            @empty
+                                No Locations
+                            @endforelse
+                        </div>
+
                     </div>
+
+                    <div class="card">
+                        <div class="card-header"></div>
+                        <div class="card-body">
+                            <div id="map" style="height: 400px;"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -107,6 +129,7 @@
                 return response.json();
             }).then(function(data) {
                 // Show the locations and their distances in the HTML (You can update this part as per your UI design)
+                console.log(data);
                 var locationsList = document.createElement('ul');
                 data.locations.forEach(function(location) {
                     var locationItem = document.createElement('li');
