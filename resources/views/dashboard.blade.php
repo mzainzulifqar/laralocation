@@ -8,21 +8,37 @@
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
+                        @if (session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-warning">{{ session('error') }}</div>
+                        @endif
+
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div class="alert alert-warning">{{ $error }}</div>
+                            @endforeach
                         @endif
 
                         <div id="map" style="height: 400px;"></div>
-                        @csrf
-                        <div class="mt-3">
+
+                        <form action="{{ route('location.store') }}"
+                        class="row row-cols-lg-auto g-3 align-items-center"
+                        method="POST">
+                            @csrf
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" name="address" id="address" class="form-control"
-                                placeholder="Selected Location Address" readonly>
-                        </div>
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" name="address" id="address" class="form-control"
+                                    placeholder="Selected Location Address" readonly>
+                            </div>
+                            <div class="col-12 align-self-end">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
                         <script>
                             var map;
                             var marker;
