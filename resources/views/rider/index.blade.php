@@ -19,7 +19,16 @@
                 @endif
 
                 <div class="card">
-                    <div class="card-header">Rider {{ auth()->user()->name }} Locations</div>
+                    <div class="card-header">My Location</div>
+
+                    <div class="card-body">
+
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">My Past Locations</div>
 
                     <div class="card-body">
                         <div class="list-group">
