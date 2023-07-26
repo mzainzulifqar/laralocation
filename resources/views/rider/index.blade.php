@@ -19,14 +19,22 @@
                 @endif
 
                 <div class="card">
-                    <div class="card-header">{{ __('Rider Locations') }}</div>
+                    <div class="card-header">Rider {{ auth()->user()->name }} Locations</div>
 
                     <div class="card-body">
-                        <ul>
-                            @foreach ($locations as $location)
-                                <li>{{ $location->address }}: {{ $location->latitude }}, {{ $location->longitude }}</li>
-                            @endforeach
-                        </ul>
+                        <div class="list-group">
+                            @forelse ($locations as $location)
+                                <a href=":javascript" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ $location->name }}</h5>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ $location->latitude }} , {{ $location->longitude }}</p>
+                                </a>
+                            @empty
+                                No Locations
+                            @endforelse
+                        </div>
 
                     </div>
                 </div>
@@ -103,7 +111,7 @@
         }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&callback=initMap" async defer>
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&callback=initMap" async
+        defer></script>
 
 @endsection

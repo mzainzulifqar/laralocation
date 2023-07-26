@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
@@ -29,6 +30,7 @@ class LocationController extends Controller
         $location->latitude = $latitude;
         $location->longitude = $longitude;
         $location->address = $address;
+        $location->name = Str::random(10);
         $user->locations()->save($location);
 
         return redirect()->back()->with('success', 'Location saved');
