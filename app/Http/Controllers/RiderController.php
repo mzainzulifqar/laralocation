@@ -58,7 +58,7 @@ class RiderController extends Controller
         $riderLongitude = $request->input('longitude');
 
         // Fetch all saved locations from the database
-        $locations = Location::all();
+        $locations = Location::latest()->get();
 
         // Calculate the distance between rider and each location and add a random title
         $locationsWithDistance = [];
@@ -66,7 +66,7 @@ class RiderController extends Controller
             $distance = $this->calculateDistance($riderLatitude, $riderLongitude, $location->latitude, $location->longitude);
             $locationsWithDistance[] = [
                 'id' => $location->id,
-                'title' => $location->name, // Replace with your own random title logic
+                'title' => $location->address, // Replace with your own random title logic
                 'distance' => $distance,
             ];
         }

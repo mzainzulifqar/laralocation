@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 @if (session('success'))
@@ -17,7 +17,10 @@
                         <div class="alert alert-warning">{{ $error }}</div>
                     @endforeach
                 @endif
-
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">My Location</div>
 
@@ -25,9 +28,12 @@
 
 
                     </div>
+
+                    <div id="map" style="height: 400px;"></div>
+
                 </div>
-
-
+            </div>
+            <div class="col-md-6">
                 <div class="card mt-2">
                     <div class="card-header d-flex justify-content-between align-items-center">All Locations
                         <span>Distance From Rider</span>
@@ -38,9 +44,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <div id="map" style="height: 400px;"></div>
-
             </div>
         </div>
     </div>
@@ -99,9 +102,9 @@
                 var locationsList = document.getElementById('all-locations');
                 data.locations.forEach(function(location) {
                     var locationItem =
-                        '<li class="list-group-item d-flex justify-content-between align-items-center">' +
+                        '<li class="list-group-item d-flex justify-content-between align-items-center"><p style="width:60%;">' +
                         location.title +
-                        '<div><span class="badge bg-primary">Distance: ' +
+                        '</p><div><span class="badge bg-primary">Distance: ' +
                         location.distance + ' km ' +
                         '</span> <a class="view-route" href="#" data-lat="' + location.latitude +
                         '" data-lng="' + location.longitude + '">View Route</a></div></li>';
