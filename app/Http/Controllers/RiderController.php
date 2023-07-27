@@ -22,7 +22,7 @@ class RiderController extends Controller
         $locations = Location::all();
 
         // Rider locations
-        $riderLocations = $user->locations;
+        $riderLocations = $user->locations()->orderBy('created_at', 'desc')->get();
 
         return view('rider.index', compact('locations', 'riderLocations'));
     }

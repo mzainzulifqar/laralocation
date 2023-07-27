@@ -24,9 +24,8 @@
 
                         <div id="map" style="height: 400px;"></div>
 
-                        <form action="{{ route('location.store') }}"
-                        class="row row-cols-lg-auto g-3 align-items-center"
-                        method="POST">
+                        <form action="{{ route('location.store') }}" class="row row-cols-lg-auto g-3 align-items-center"
+                            method="POST">
                             @csrf
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
