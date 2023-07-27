@@ -22,9 +22,9 @@ class RiderController extends Controller
         $locations = Location::all();
 
         // Rider locations
-        $riderLocations = $user->locations;
+        // $riderLocations = $user->locations;
 
-        return view('rider.index', compact('locations', 'riderLocations'));
+        return view('rider.index', compact('locations'));
     }
 
     public function getLocation(Request $request)
