@@ -24,7 +24,7 @@ class RiderController extends Controller
         // Rider locations
         $riderLocations = $user->locations()->orderBy('created_at', 'desc')->get();
 
-        return view('rider.index', compact('locations', 'riderLocations'));
+        return view('rider.index', compact('locations'));
     }
 
     public function getLocation(Request $request)

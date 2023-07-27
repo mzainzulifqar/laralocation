@@ -27,27 +27,8 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">My Past Locations
-                        <span>Location Date</span></div>
-
-                    <div class="card-body">
-                        <ul class="list-group">
-                            @forelse ($riderLocations as $location)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ $loop->index + 1 }}. {{ $location->name }}
-                                    <span
-                                        class="badge bg-primary">{{ \Carbon\Carbon::parse($location->created_at)->diffForHumans() }}</span>
-                                </li>
-                            @empty
-                                No Locations
-                            @endforelse
-                        </ul>
-
-                    </div>
-                </div>
-
-                <div class="card">
+                
+                <div class="card mt-2">
                     <div class="card-header d-flex justify-content-between align-items-center">All Locations <span>Distance
                             From Rider</span></div>
                     <div class="card-body">
@@ -102,9 +83,9 @@
                     var locationItem =
                         '<li class="list-group-item d-flex justify-content-between align-items-center">' +
                         location.title +
-                        '<span class="badge bg-primary">Distance: ' +
+                        '<div><span class="badge bg-primary">Distance: ' +
                         location.distance + ' km ' +
-                        '</span> </li>';
+                        '</span> <a href="">View Route</a></div></li>';
                     locationsList.insertAdjacentHTML('beforeend', locationItem);
                 });
                 // document.body.appendChild(locationsList);
@@ -128,6 +109,7 @@
             }).then(function(response) {
                 return response.json();
             }).then(function(data) {
+                console.log(data);
                 if (data && data.address) {
                     document.getElementById('address').innerHTML = '<p class="alert alert-info">Location: ' + data
                         .address + '</p>';
