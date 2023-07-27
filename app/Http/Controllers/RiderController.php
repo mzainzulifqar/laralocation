@@ -81,11 +81,36 @@ class RiderController extends Controller
 
     private function calculateDistance($lat1, $lon1, $lat2, $lon2)
     {
-        $theta = $lon1 - $lon2;
-        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-        $dist = acos($dist);
-        $dist = rad2deg($dist);
-        $miles = $dist * 60 * 1.1515;
-        return round($miles * 1.609344, 2); // Convert miles to kilometers and round to 2 decimal places
+        // $origin = urlencode($lat1.','.$lon1);
+        // $destination = urlencode($lat2.','.$lon2);
+
+        // // Replace YOUR_API_KEY with your actual Google Maps API key
+        // $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=$origin&destinations=$destination&key=".env('GOOGLE_API');
+
+        // $response = Http::get($url);
+
+        // // Check for successful response
+        // if ($response->successful()) {
+        //     $data = $response->json();
+        //     if (isset($data['rows'][0]['elements'][0]['distance']['text'])) {
+        //         return $data['rows'][0]['elements'][0]['distance']['text'];
+        //     } else {
+        //         return "Undefined";
+        //     }
+
+        // } else {
+        //     echo "Error: Unable to get distance.";
+        // }
+
+        $earthRadius = 6371; // Radius of the earth in km
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * asin(sqrt($a));
+        $distance = $earthRadius * $c;
+
+        return round($distance * 1.609344, 2);
     }
 }

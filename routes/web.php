@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/rider', [RiderController::class, 'index'])->name('rider.index');
     Route::post('/rider/get-location', [RiderController::class, 'getLocation'])->name('rider.location');
     Route::post('/rider/get-route', [RiderController::class, 'getRoute'])->name('rider.route');
+
+    Route::get('/route',function(){
+        return view('route');
+    })->name('route');
 });
 
 Auth::routes();
