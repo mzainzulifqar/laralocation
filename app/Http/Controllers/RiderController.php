@@ -21,7 +21,10 @@ class RiderController extends Controller
         // Fetch all saved locations from the database
         $locations = Location::all();
 
-        return view('rider.index', compact('locations'));
+        // Rider locations
+        $riderLocations = $user->locations;
+
+        return view('rider.index', compact('locations', 'riderLocations'));
     }
 
     public function getLocation(Request $request)
