@@ -27,22 +27,37 @@
                     </div>
                 </div>
 
-                
+
                 <div class="card mt-2">
-                    <div class="card-header d-flex justify-content-between align-items-center">All Locations <span>Distance
-                            From Rider</span></div>
+                    <div class="card-header d-flex justify-content-between align-items-center">All Locations
+                        <span>Distance From Rider</span>
+                    </div>
                     <div class="card-body">
                         <ul class="list-group" id="all-locations">
 
                         </ul>
                     </div>
                 </div>
+
+                <div id="map" style="height: 400px;"></div>
+
             </div>
         </div>
     </div>
 
     <script>
+        var map;
+        var marker;
+
         function initMap() {
+            var initialLocation = {
+                lat: 0,
+                lng: 0
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: initialLocation,
+                zoom: 15
+            });
 
             // Try to get the rider's location
             if (navigator.geolocation) {
@@ -51,6 +66,13 @@
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
+
+                    map.setCenter(riderLocation);
+                    marker = new google.maps.Marker({
+                        position: riderLocation,
+                        map: map,
+                        draggable: true
+                    });
 
                     fetchAddress(riderLocation.lat, riderLocation.lng);
                     // Get the locations and their distances from the rider
