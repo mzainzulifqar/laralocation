@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Google\MapsService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class RiderController extends Controller
 {
@@ -25,6 +27,21 @@ class RiderController extends Controller
         $riderLocations = $user->locations()->orderBy('created_at', 'desc')->get();
 
         return view('rider.index', compact('locations'));
+    }
+
+    public function getRoute(Request $request)
+    {
+        $origin = $request->input('origin');
+        $destination = $request->input('destination');
+        $apiKey = config('services.google.api_key');
+
+        $response = Http::get('https://maps.googleapis.com/maps/api/directions/json', [
+            'origin' => $origin,
+            'destination' => $destination,
+            'key' => $apiKey,
+        ]);
+
+        return $response->json();
     }
 
     public function getLocation(Request $request)

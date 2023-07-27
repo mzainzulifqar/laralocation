@@ -54,8 +54,8 @@ class LocationController extends Controller
 
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        $maps = new MapsService($latitude, $longitude);
-        $address = $maps->fetch();
+        $maps = new MapsService();
+        $address = $maps->fetch($latitude, $longitude);
         if ($address)
             return response()->json(['address' => $address]);
 

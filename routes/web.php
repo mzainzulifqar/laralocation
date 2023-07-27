@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/rider', [RiderController::class, 'index'])->name('rider.index');
     Route::post('/rider/get-location', [RiderController::class, 'getLocation'])->name('rider.location');
+    Route::post('/rider/get-route', [RiderController::class, 'getRoute'])->name('rider.route');
 });
 
 Auth::routes();

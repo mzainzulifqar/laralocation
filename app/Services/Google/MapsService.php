@@ -11,19 +11,21 @@ class MapsService
     private $endpoint;
     public $latitude;
     public $longitude;
+    public $client;
 
-    public function __construct($latitude, $longitude)
+    public function __construct()
     {
         $this->api_key = config('services.google.api_key');
         $this->endpoint = config('services.google.maps_enpoint');
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
+        $this->client = new Client();
 
     }
 
-    public function fetch()
+    public function fetch($latitude, $longitude)
     {
-        $client = new Client();
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $client = $this->client;
         $response = $client->get($this->endpoint, [
             'query' => [
                 'latlng' => $this->latitude . ',' . $this->longitude,
@@ -38,5 +40,18 @@ class MapsService
         }
 
         return false;
+    }
+
+    public function route($origin, $destination){
+
+        $client = $this->client;
+        $response = $client->get($this->endpoint, [
+            'origin' => $origin,
+            'destination' => $destination,
+            'key' => $this->api_key,
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+        return $data;
     }
 }

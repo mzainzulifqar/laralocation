@@ -48,6 +48,8 @@
     <script>
         var map;
         var marker;
+        var token = document.head.querySelector('meta[name="csrf-token"]');
+        var tokenContent = token.content;
 
         function initMap() {
             var initialLocation = {
@@ -82,8 +84,6 @@
         }
 
         function fetchRiderLocations(riderLocation) {
-            var token = document.head.querySelector('meta[name="csrf-token"]');
-            var tokenContent = token.content;
             var formData = new FormData();
             formData.append('latitude', riderLocation.lat);
             formData.append('longitude', riderLocation.lng);
@@ -95,11 +95,7 @@
             }).then(function(response) {
                 return response.json();
             }).then(function(data) {
-                // Show the locations and their distances in the HTML (You can update this part as per your UI design)
-                // data.locations.forEach(function(location) {
-                //     var locationItem = document.getElementById('distance' + location.id);
-                //     locationItem.innerHTML = location.title + ': ' + location.distance + ' km';
-                // });
+
                 var locationsList = document.getElementById('all-locations');
                 data.locations.forEach(function(location) {
                     var locationItem =
@@ -107,19 +103,29 @@
                         location.title +
                         '<div><span class="badge bg-primary">Distance: ' +
                         location.distance + ' km ' +
-                        '</span> <a href="">View Route</a></div></li>';
+                        '</span> <a class="view-route" href="#" data-lat="' + location.latitude +
+                        '" data-lng="' + location.longitude + '">View Route</a></div></li>';
                     locationsList.insertAdjacentHTML('beforeend', locationItem);
                 });
-                // document.body.appendChild(locationsList);
+
+                // Add click event listener to "View Route" links
+                var viewRouteLinks = document.querySelectorAll('.view-route');
+                viewRouteLinks.forEach(function(link) {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var destinationLat = this.getAttribute('data-lat');
+                        var destinationLng = this.getAttribute('data-lng');
+                        fetchRoute(riderLocation, destinationLat, destinationLng);
+                    });
+                });
+
             }).catch(function(error) {
                 console.log(error);
             });
         }
 
-
+        // Get Rider Current Location
         function fetchAddress(latitude, longitude) {
-            var token = document.head.querySelector('meta[name="csrf-token"]');
-            var tokenContent = token.content;
             var formData = new FormData();
             formData.append('latitude', latitude);
             formData.append('longitude', longitude);
@@ -131,7 +137,6 @@
             }).then(function(response) {
                 return response.json();
             }).then(function(data) {
-                console.log(data);
                 if (data && data.address) {
                     document.getElementById('address').innerHTML = '<p class="alert alert-info">Location: ' + data
                         .address + '</p>';
@@ -142,9 +147,55 @@
                 console.log(error);
             });
         }
+
+        function fetchRoute(origin, destinationLat, destinationLng) {
+            var formData = new FormData();
+            formData.append('origin', origin.lat + ',' + origin.lng);
+            formData.append('destination', destinationLat + ',' + destinationLng);
+            formData.append('_token', tokenContent);
+
+            fetch('/rider/get-route', {
+                method: 'POST',
+                body: formData
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                // Display the route on the map
+                displayRoute(data);
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
+
+        function displayRoute(routeData) {
+            // Check if the response contains routes
+            console.log(routeData);
+            if (routeData.routes && routeData.routes.length > 0) {
+                var route = routeData.routes[0];
+
+                // Check if the route contains the expected overview_polyline property
+                if (route.overview_polyline && route.overview_polyline.points) {
+                    var overviewPath = route.overview_polyline.points;
+                    var decodedPath = google.maps.geometry.encoding.decodePath(overviewPath);
+
+                    var routePolyline = new google.maps.Polyline({
+                        path: decodedPath,
+                        strokeColor: '#007BFF',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2
+                    });
+                    routePolyline.setMap(map);
+                } else {
+                    console.log('Route data is incomplete or missing overview_polyline property.');
+                }
+            } else {
+                console.log('No routes found in the response.');
+            }
+        }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&callback=initMap" async
-        defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.api_key') }}&callback=initMap&libraries=geometry"
+        async defer></script>
 
 @endsection
