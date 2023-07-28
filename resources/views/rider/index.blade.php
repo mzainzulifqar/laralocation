@@ -22,18 +22,20 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">My Location</div>
-
-                    <div class="card-body" id="address">
-
-
+                    <div class="card-header">Route</div>
+                    <div class="card">
+                        <div id="map" style="height: 400px; width: 100%;"></div>
                     </div>
-
-                    <div id="map" style="height: 400px;"></div>
-
                 </div>
             </div>
             <div class="col-md-6">
+
+                <div class="card">
+                    <div class="card-header">My Location</div>
+                    <div class="card-body" id="address">
+                    </div>
+                </div>
+
                 <div class="card mt-2">
                     <div class="card-header d-flex justify-content-between align-items-center">All Locations
                         <span>Distance From Rider</span>
@@ -56,8 +58,8 @@
 
         function initMap() {
             var initialLocation = {
-                lat: 0,
-                lng: 0
+                lat: 33.6844,
+                lng: 73.0479
             };
             map = new google.maps.Map(document.getElementById('map'), {
                 center: initialLocation,
@@ -152,48 +154,42 @@
         }
 
         function fetchRoute(origin, destinationLat, destinationLng) {
-            var formData = new FormData();
-            formData.append('origin', origin.lat + ',' + origin.lng);
-            formData.append('destination', destinationLat + ',' + destinationLng);
-            formData.append('_token', tokenContent);
 
-            fetch('/rider/get-route', {
-                method: 'POST',
-                body: formData
-            }).then(function(response) {
-                return response.json();
-            }).then(function(data) {
-                // Display the route on the map
-                displayRoute(data);
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
+            // Get origin and destination
+            var origin = origin.lat + ',' + origin.lng;
+            var destination = destinationLat + ',' + destinationLng;
 
-        function displayRoute(routeData) {
-            // Check if the response contains routes
-            console.log(routeData);
-            if (routeData.routes && routeData.routes.length > 0) {
-                var route = routeData.routes[0];
+            // Create a DirectionsService object to use the route method and get a result
+            var directionsService = new google.maps.DirectionsService();
 
-                // Check if the route contains the expected overview_polyline property
-                if (route.overview_polyline && route.overview_polyline.points) {
-                    var overviewPath = route.overview_polyline.points;
-                    var decodedPath = google.maps.geometry.encoding.decodePath(overviewPath);
+            // Create a DirectionsRenderer object to display the route
+            var directionsRenderer = new google.maps.DirectionsRenderer();
 
-                    var routePolyline = new google.maps.Polyline({
-                        path: decodedPath,
-                        strokeColor: '#007BFF',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-                    routePolyline.setMap(map);
+            // Bind the DirectionsRenderer to the map
+            directionsRenderer.setMap(map);
+
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    // Display the route
+                    directionsRenderer.setDirections(response);
+
+                    // Generate Google Maps link
+                    var mapsLink = document.createElement('a');
+                    mapsLink.href = 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin) +
+                        '&destination=' + encodeURIComponent(destination);
+                    mapsLink.textContent = 'Open in Google Maps';
+                    mapsLink.target = '_blank';
+
+                    // Append link to the document
+                    document.body.appendChild(mapsLink);
                 } else {
-                    console.log('Route data is incomplete or missing overview_polyline property.');
+                    window.alert('Directions request failed due to ' + status);
                 }
-            } else {
-                console.log('No routes found in the response.');
-            }
+            });
         }
     </script>
 
