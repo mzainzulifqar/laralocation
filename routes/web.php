@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\RidersController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -34,11 +35,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/rider/get-route', [RidersController::class, 'getRoute'])->name('rider.route');
 
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::post('/users', [UsersController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UsersController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/medicines', [MedicineController::class, 'index'])->name('medicines.index');
+    Route::post('/medicines', [MedicineController::class, 'store'])->name('medicines.store');
+    Route::put('/medicines/{medicine}', [MedicineController::class, 'update'])->name('medicines.update');
+    Route::delete('/medicines/{medicine}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
 });
 
 Auth::routes();
