@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +33,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/rider/get-location', [RiderController::class, 'getLocation'])->name('rider.location');
     Route::post('/rider/get-route', [RiderController::class, 'getRoute'])->name('rider.route');
 
-    Route::get('/route',function(){
-        return view('route');
-    })->name('route');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 
 Auth::routes();
