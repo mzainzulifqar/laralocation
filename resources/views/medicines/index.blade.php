@@ -34,16 +34,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($Medicines as $Medicine)
+                    @foreach ($medicines as $medicine)
                         <tr>
-                            <td>{{ $Medicine->name }}</td>
-                            <td>{{ $Medicine->quantity }}</td>
+                            <td>{{ $medicine->name }}</td>
+                            <td>{{ $medicine->quantity }}</td>
                             <td>
                                 <button class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                    data-bs-target="#editModal{{ $Medicine->id }}">Edit</button>
+                                    data-bs-target="#editModal{{ $medicine->id }}">Edit</button>
                                 <button class="btn btn-sm btn-secondary" data-bs-toggle="modal"
-                                    data-bs-target="#viewModal{{ $Medicine->id }}">View</button>
-                                <form action="{{ route('medicines.destroy', $Medicine) }}" method="POST"
+                                    data-bs-target="#viewModal{{ $medicine->id }}">View</button>
+                                <form action="{{ route('medicines.destroy', $medicine) }}" method="POST"
                                     style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
@@ -54,20 +54,20 @@
                         </tr>
 
                         <!-- View Modal -->
-                        <div class="modal fade" id="viewModal{{ $Medicine->id }}" tabindex="-1"
-                            aria-labelledby="viewModal{{ $Medicine->id }}Label" aria-hidden="true">
+                        <div class="modal fade" id="viewModal{{ $medicine->id }}" tabindex="-1"
+                            aria-labelledby="viewModal{{ $medicine->id }}Label" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="viewModal{{ $Medicine->id }}Label">View Medicine:
-                                            {{ $Medicine->name }}</h5>
+                                        <h5 class="modal-title" id="viewModal{{ $medicine->id }}Label">View Medicine:
+                                            {{ $medicine->name }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Name: {{ $Medicine->name }}</p>
-                                        <p>Quantity: {{ $Medicine->quantity }}</p>
-                                        <p>Created: {{ $Medicine->created_at }}</p>
+                                        <p>Name: {{ $medicine->name }}</p>
+                                        <p>Quantity: {{ $medicine->quantity }}</p>
+                                        <p>Created: {{ $medicine->created_at }}</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
@@ -78,31 +78,31 @@
                         </div>
 
                         <!-- Edit Modal -->
-                        <div class="modal fade" id="editModal{{ $Medicine->id }}" tabindex="-1"
-                            aria-labelledby="editModal{{ $Medicine->id }}Label" aria-hidden="true">
+                        <div class="modal fade" id="editModal{{ $medicine->id }}" tabindex="-1"
+                            aria-labelledby="editModal{{ $medicine->id }}Label" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editModal{{ $Medicine->id }}Label">Edit Medicine:
-                                            {{ $Medicine->name }}</h5>
+                                        <h5 class="modal-title" id="editModal{{ $medicine->id }}Label">Edit Medicine:
+                                            {{ $medicine->name }}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('medicines.update', $Medicine) }}" method="POST">
+                                        <form action="{{ route('medicines.update', $medicine) }}" method="POST">
                                             @csrf
                                             @method('PUT')
 
                                             <div class="mb-3">
-                                                <label for="editName{{ $Medicine->id }}" class="form-label">Name</label>
-                                                <input type="text" class="form-control" id="editName{{ $Medicine->id }}"
-                                                    name="name" value="{{ old('name', $Medicine->name) }}" required>
+                                                <label for="editName{{ $medicine->id }}" class="form-label">Name</label>
+                                                <input type="text" class="form-control" id="editName{{ $medicine->id }}"
+                                                    name="name" value="{{ old('name', $medicine->name) }}" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="editQuantity{{ $Medicine->id }}" class="form-label">Quantity</label>
+                                                <label for="editQuantity{{ $medicine->id }}" class="form-label">Quantity</label>
                                                 <input type="text" class="form-control"
-                                                    id="editQuantity{{ $Medicine->id }}" name="quantity"
-                                                    value="{{ old('quantity', $Medicine->quantity) }}" required>
+                                                    id="editQuantity{{ $medicine->id }}" name="quantity"
+                                                    value="{{ old('quantity', $medicine->quantity) }}" required>
                                             </div>
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>

@@ -9,54 +9,54 @@ class MedicineController extends Controller
 {
     public function index()
     {
-        $Medicines = Medicine::all();
-        return view('medicines.index', compact('Medicines'));
+        $medicines = Medicine::all();
+        return view('medicines.index', compact('medicines'));
     }
 
     public function store(Request $request)
     {
         // Validate the form data
         $request->validate([
-            'name' => 'required|string|max:255|unique:Medicines',
+            'name' => 'required|string|max:255|unique:medicines',
             'quantity' => 'required|integer',
         ]);
 
         // Create the new Medicine
-        $Medicine = new Medicine([
+        $medicine = new Medicine([
             'name' => $request->input('name'),
             'quantity' => $request->input('quantity'),
         ]);
 
         // Save the Medicine to the database
-        $Medicine->save();
+        $medicine->save();
 
         // Redirect back with a success message
         return redirect()->route('medicines.index')->with('success', 'Medicine created successfully.');
     }
 
-    public function update(Request $request, Medicine $Medicine)
+    public function update(Request $request, Medicine $medicine)
     {
         // Validate the form data
         $request->validate([
-            'name' => 'required|string|unique:Medicines,name,' . $Medicine->id,
+            'name' => 'required|string|unique:medicines,name,' . $medicine->id,
             'quantity' => 'nullable|string|min:8|confirmed',
         ]);
 
         // Update the Medicine data
-        $Medicine->name = $request->input('name');
-        $Medicine->quantity = $request->input('quantity');
+        $medicine->name = $request->input('name');
+        $medicine->quantity = $request->input('quantity');
 
-        // Save the updated Medicine to the database
-        $Medicine->save();
+        // Save the updated medicine to the database
+        $medicine->save();
 
         // Redirect back with a success message
         return redirect()->route('medicines.index')->with('success', 'Medicine updated successfully.');
     }
 
-    public function destroy(Medicine $Medicine)
+    public function destroy(Medicine $medicine)
     {
         // Delete the Medicine from the database
-        $Medicine->delete();
+        $medicine->delete();
 
         // Redirect back with a success message
         return redirect()->route('medicines.index')->with('success', 'Medicine deleted successfully.');
