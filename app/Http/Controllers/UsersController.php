@@ -19,7 +19,7 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         // Create the new user
@@ -42,7 +42,7 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         // Update the user data

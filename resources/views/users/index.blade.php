@@ -149,8 +149,8 @@
                                 value="{{ old('password') }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="createPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="createPassword" name="password_confirmation"
+                            <label for="createPasswordConfirmation" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="createPasswordConfirmation" name="password_confirmation"
                                 value="{{ old('password_confirmation') }}" required>
                         </div>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
