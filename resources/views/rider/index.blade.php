@@ -1,55 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
 
-                @if (session('error'))
-                    <div class="alert alert-warning">{{ session('error') }}</div>
-                @endif
+                    @if (session('error'))
+                        <div class="alert alert-warning">{{ session('error') }}</div>
+                    @endif
 
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-warning">{{ $error }}</div>
-                    @endforeach
-                @endif
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-warning">{{ $error }}</div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Route</div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
                     <div class="card">
-                        <div id="map" style="height: 400px; width: 100%;"></div>
+                        <div class="card-header">Route</div>
+                        <div class="card">
+                            <div id="map" style="height: 400px; width: 100%;"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
+                <div class="col-md-6">
 
-                <div class="card">
-                    <div class="card-header">My Location</div>
-                    <div class="card-body" id="address">
+                    <div class="card">
+                        <div class="card-header">My Location</div>
+                        <div class="card-body" id="address">
+                        </div>
                     </div>
-                </div>
 
-                <div class="card mt-2">
-                    <div class="card-header d-flex justify-content-between align-items-center">All Locations
-                        <span>Distance From Rider</span>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group" id="all-locations">
+                    <div class="card mt-2">
+                        <div class="card-header d-flex justify-content-between align-items-center">All Locations
+                            <span>Distance From Rider</span>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group" id="all-locations">
 
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         var map;
         var marker;
