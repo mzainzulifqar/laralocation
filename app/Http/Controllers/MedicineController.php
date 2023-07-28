@@ -39,7 +39,7 @@ class MedicineController extends Controller
         // Validate the form data
         $request->validate([
             'name' => 'required|string|unique:medicines,name,' . $medicine->id,
-            'quantity' => 'nullable|string|min:8|confirmed',
+            'quantity' => 'nullable|integer',
         ]);
 
         // Update the Medicine data
