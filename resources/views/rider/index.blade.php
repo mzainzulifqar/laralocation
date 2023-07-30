@@ -19,7 +19,7 @@
                 @endif
             </div>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" id="content">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">Route</div>
@@ -190,7 +190,7 @@
                     mapsLink.className = 'mapsLink'; // add this line
 
                     // Append link to the document
-                    document.body.appendChild(mapsLink);
+                    document.getElementById('content').appendChild(mapsLink);
                 } else {
                     window.alert('Directions request failed due to ' + status);
                 }
