@@ -67,6 +67,8 @@ class RiderController extends Controller
             $locationsWithDistance[] = [
                 'id' => $location->id,
                 'title' => $location->address, // Replace with your own random title logic
+                'latitude' => $location->latitude,
+                'longitude' => $location->longitude,
                 'distance' => $distance,
             ];
         }

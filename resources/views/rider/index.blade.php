@@ -177,12 +177,18 @@
                     // Display the route
                     directionsRenderer.setDirections(response);
 
-                    // Generate Google Maps link
+                    // Remove existing links
+                    var existingLinks = document.querySelectorAll('.mapsLink');
+                    existingLinks.forEach(function (link) {
+                        link.remove();
+                    });
+
                     var mapsLink = document.createElement('a');
                     mapsLink.href = 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin) +
                         '&destination=' + encodeURIComponent(destination);
                     mapsLink.textContent = 'Open in Google Maps';
                     mapsLink.target = '_blank';
+                    mapsLink.className = 'mapsLink'; // add this line
 
                     // Append link to the document
                     document.body.appendChild(mapsLink);
