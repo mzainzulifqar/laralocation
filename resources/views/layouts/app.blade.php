@@ -37,7 +37,13 @@
                             <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('medicines.index') }}">{{ __('Medicines') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('rider.index') }}">{{ __('Rider Location') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}">{{ __('Users') }}</a>
                         </li>
                     </ul>
 

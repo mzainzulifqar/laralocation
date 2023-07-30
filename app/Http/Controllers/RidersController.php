@@ -9,7 +9,7 @@ use App\Services\Google\MapsService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class RiderController extends Controller
+class RidersController extends Controller
 {
     public function index()
     {

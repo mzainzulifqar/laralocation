@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RiderController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\RidersController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,13 +30,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/location', [LocationController::class, 'store'])->name('location.store');
     Route::post('/location/fetch-address', [LocationController::class, 'fetchAddress'])->name('location.address');
 
-    Route::get('/rider', [RiderController::class, 'index'])->name('rider.index');
-    Route::post('/rider/get-location', [RiderController::class, 'getLocation'])->name('rider.location');
-    Route::post('/rider/get-route', [RiderController::class, 'getRoute'])->name('rider.route');
+    Route::get('/rider', [RidersController::class, 'index'])->name('rider.index');
+    Route::post('/rider/get-location', [RidersController::class, 'getLocation'])->name('rider.location');
+    Route::post('/rider/get-route', [RidersController::class, 'getRoute'])->name('rider.route');
 
-    Route::get('/route',function(){
-        return view('route');
-    })->name('route');
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::post('/users', [UsersController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}', [UsersController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/medicines', [MedicineController::class, 'index'])->name('medicines.index');
+    Route::post('/medicines', [MedicineController::class, 'store'])->name('medicines.store');
+    Route::put('/medicines/{medicine}', [MedicineController::class, 'update'])->name('medicines.update');
+    Route::delete('/medicines/{medicine}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
 });
 
 Auth::routes();
